@@ -36,6 +36,42 @@ export class KanbanBoard implements OnInit {
   generateTestId = (name) => {
     return name.split(' ').join('-');
   }
+
+  create(){
+    var input = (<HTMLInputElement>document.getElementById('create-task-input')).value;
+    for(var x in this.tasks){
+      if(this.tasks[x].name===input){
+	return;
+      }
+    }
+    if(input!==''){
+      var task = { name:input,stage:0};
+      this.tasks.push(task);
+    }
+    this.configureTasksForRendering();
+  }
+
+  forward(task){
+    task.stage++;
+    if(task.stage>3){
+      task.stage=3;
+    }
+    this.configureTasksForRendering();
+  }
+  
+  backward(task){
+    task.stage--;
+    if(task.stage<0){
+      task.stage=0;
+    }
+    this.configureTasksForRendering();
+  }
+
+  delete(task){
+    var index = this.tasks.indexOf(task);
+    this.tasks.splice(index,1);
+    this.configureTasksForRendering();
+  }
 }
 
 interface Task {
